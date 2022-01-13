@@ -1,4 +1,5 @@
 # Tic Tac Toe 
+The classic game of tic-tac-toe.
 
 ## Interface :low_brightness:
 --will add later--
