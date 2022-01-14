@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("#gameboard").addEventListener("click", markField);
   var current = 0,
-    players = ["x", "o"],
+    players = ["X", "O"],
     winner,
     finished, // game-over flag;
     fields = document.querySelectorAll("#gameboard button"), // the squares
@@ -83,14 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Game over?
     if (full || winner) {
       finished = true;
-      if (winner == "x" || winner == "o") {
+      if (winner == "X" || winner == "O") {
         hint.innerText = "The game is over because player " + winner + " won!";
         hint.className = "success";
       } else {
         // Game over because all fields are occupied
         hint.innerText =
           "The game ends in a draw because all fields are occupied.";
-        hint.className = "warning";
       }
       //new game?
       var newGame = confirm("New game?", "");
