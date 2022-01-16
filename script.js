@@ -34,51 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // determine winners
     for (i = 0; i < 3; i++) {
       // 3 vertical
-      if (
-        fields[0 + i].getAttribute("aria-label") != "" &&
-        fields[0 + i].getAttribute("aria-label") ==
-          fields[3 + i].getAttribute("aria-label") &&
-        fields[3 + i].getAttribute("aria-label") ==
-          fields[6 + i].getAttribute("aria-label")
-      ) {
-        // we have a winner!
-        winner = fields[0 + i].getAttribute("aria-label");
-        highlightCells([fields[i], fields[3 + i], fields[6 + i]]);
-      }
+      checkIfEquals(0 + i, 3 + i, 6 + i);
       // 3 horizontal
-      if (
-        fields[i * 3].getAttribute("aria-label") != "" &&
-        fields[i * 3].getAttribute("aria-label") ==
-          fields[i * 3 + 1].getAttribute("aria-label") &&
-        fields[i * 3 + 1].getAttribute("aria-label") ==
-          fields[i * 3 + 2].getAttribute("aria-label")
-      ) {
-        // we have a winner!
-        winner = fields[i * 3].getAttribute("aria-label");
-        highlightCells([fields[i * 3], fields[i * 3 + 1], fields[i * 3 + 2]]);
-      }
-    }
-    // diagonally top left to bottom right
-    if (
-      fields[0].getAttribute("aria-label") != "" &&
-      fields[0].getAttribute("aria-label") ==
-        fields[4].getAttribute("aria-label") &&
-      fields[4].getAttribute("aria-label") ==
-        fields[8].getAttribute("aria-label")
-    ) {
-      winner = fields[0].getAttribute("aria-label");
-      highlightCells([fields[0], fields[4], fields[8]]);
-    }
-    // diagonally top right to bottom left
-    if (
-      fields[2].getAttribute("aria-label") != "" &&
-      fields[2].getAttribute("aria-label") ==
-        fields[4].getAttribute("aria-label") &&
-      fields[4].getAttribute("aria-label") ==
-        fields[6].getAttribute("aria-label")
-    ) {
-      winner = fields[2].getAttribute("aria-label");
-      highlightCells([fields[2], fields[4], fields[6]]);
+      checkIfEquals(i * 3, i * 3 + 1, i * 3 + 2);
+      // diagonally top left to bottom right
+      checkIfEquals(0, 4, 8);
+      // diagonally top right to bottom left
+      checkIfEquals(2, 4, 6);
     }
     // Game over?
     if (full || winner) {
@@ -97,6 +59,20 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
         return false;
       }
+    }
+  }
+
+  function checkIfEquals(x, y, z) {
+    if (
+      fields[x].getAttribute("aria-label") != "" &&
+      fields[x].getAttribute("aria-label") ==
+        fields[y].getAttribute("aria-label") &&
+      fields[y].getAttribute("aria-label") ==
+        fields[z].getAttribute("aria-label")
+    ) {
+      // we have a winner!
+      winner = fields[x].getAttribute("aria-label");
+      highlightCells([fields[x], fields[y], fields[z]]);
     }
   }
 
