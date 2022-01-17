@@ -15,38 +15,48 @@ document.addEventListener("DOMContentLoaded", function () {
     field.setAttribute("disabled", "disabled");
     current = 1 - current;
     hint.innerText = "Next is: " + players[current];
-    checkIfCompleted();
+    displayResult();
   }
 
-  function checkIfCompleted() {
-    var fields = document.querySelectorAll("#gameboard button"), // fields is the list of our fields
+  function getWinner() {
+    var fields = document.querySelectorAll("#gameboard button"),
       full = true; // we assume that all cells have been used
-    // all fields marked?
     for (var i = 0; i < fields.length; i++) {
       if (!fields[i].hasAttribute("disabled")) {
         full = false;
       }
     }
-    // if full then game over, if not full then not yet
     if (full) {
-      full = true;
+      // game over
+      return true;
     }
     // determine winners
     for (i = 0; i < 3; i++) {
-      // 3 vertical
-      checkIfEquals(0 + i, 3 + i, 6 + i);
-      // 3 horizontal
-      checkIfEquals(i * 3, i * 3 + 1, i * 3 + 2);
-      // diagonally top left to bottom right
-      checkIfEquals(0, 4, 8);
-      // diagonally top right to bottom left
-      checkIfEquals(2, 4, 6);
+      if (checkIfEquals(0 + i, 3 + i, 6 + i)) {
+        winner = fields[0 + i].getAttribute("aria-label");
+        highlightCells([fields[0 + i], fields[3 + i], fields[6 + i]]);
+      } else if (checkIfEquals(i * 3, i * 3 + 1, i * 3 + 2)) {
+        winner = fields[i * 3].getAttribute("aria-label");
+        highlightCells([fields[i * 3], fields[i * 3 + 1], fields[i * 3 + 2]]);
+      } else if (checkIfEquals(0, 4, 8)) {
+        winner = fields[0].getAttribute("aria-label");
+        highlightCells([fields[0], fields[4], fields[8]]);
+      } else if (checkIfEquals(2, 4, 6)) {
+        winner = fields[2].getAttribute("aria-label");
+        highlightCells([fields[2], fields[4], fields[6]]);
+      }
     }
+    //we have a winner
+    return winner;
+  }
+
+  function displayResult() {
     // Game over?
-    if (full || winner) {
+    if (getWinner()) {
       finished = true;
-      if (winner == "X" || winner == "O") {
-        hint.innerText = "The game is over because player " + winner + " won!";
+      if (getWinner() == "X" || getWinner() == "O") {
+        hint.innerText =
+          "The game is over because player " + getWinner() + " won!";
         hint.className = "success";
       } else {
         // Game over because all fields are occupied
@@ -70,10 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
       fields[y].getAttribute("aria-label") ==
         fields[z].getAttribute("aria-label")
     ) {
-      // we have a winner!
-      winner = fields[x].getAttribute("aria-label");
-      highlightCells([fields[x], fields[y], fields[z]]);
-    }
+      return true;
+    } else return false;
   }
 
   function highlightCells(cells) {
